@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+    <androidx.cardview.widget.CardView
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="10dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="10dp"
+        >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <ImageView
+                android:id="@+id/img_sanpham"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/techstore"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_tensanpham"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Điện thoại 123"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_giaTien"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12344"
+                android:textColor="#E91E63"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_giaTien"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="12344"-->
+<!--                android:textColor="#80000000" />-->
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
