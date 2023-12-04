@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/itHome"
+        android:icon="@drawable/trangchu2"
+        android:title="Home"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/itGioHang"
+        android:icon="@drawable/giohang2"
+        android:title="Giỏ Hàng"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/itUser"
+        android:icon="@drawable/taikhoan2"
+        android:title="Tài Khoản"
+        app:showAsAction="always" />
+</menu>
