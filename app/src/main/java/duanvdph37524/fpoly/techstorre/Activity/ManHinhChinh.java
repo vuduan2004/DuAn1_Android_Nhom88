@@ -14,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import duanvdph37524.fpoly.techstorre.Fragment.FragmentLoaiSP;
+import duanvdph37524.fpoly.techstorre.Fragment.Fragment_GioHang;
 import duanvdph37524.fpoly.techstorre.R;
 
 public class ManHinhChinh extends AppCompatActivity {
@@ -29,7 +30,7 @@ public class ManHinhChinh extends AppCompatActivity {
                 if (item.getItemId() == R.id.itHome) {
                     replanceFragment(new FragmentLoaiSP());
                 } else if (item.getItemId() == R.id.itGioHang) {
-//                    startActivity(new Intent(ManHinhChinh.this, GioHangActivity.class));
+                    replanceFragment(new Fragment_GioHang());
                 } else if (item.getItemId() == R.id.itUser) {
 //                  startActivity(new Intent(MainActivity.this, QuanLyTaiKhoan.class));
                 }
