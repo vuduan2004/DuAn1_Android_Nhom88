@@ -37,6 +37,8 @@ public class AdapterGioHang extends RecyclerView.Adapter<AdapterGioHang.viewHole
     double tongTien, tien, giaTien;
     int soLuongMua,soLuong;
 
+
+
     public interface TongTienListener {
         void tongTien(double tongTien);
         void soLuongSanPham(int soLuong);

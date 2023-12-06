@@ -57,6 +57,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 "- Các tính năng luyện tập thể dục\n" +
                 "- Thay đổi mặt đồng hồ',50)");
 
+
+
+
         String createTableGioHang = "Create table GioHang" +
                 "(maGioHang Integer Primary key Autoincrement," +
                 "maSP Integer References SanPham(maSP)," +
@@ -78,6 +81,7 @@ public class DbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(createTableChiTieHD);
         sqLiteDatabase.execSQL(createTableHoaDon);
         sqLiteDatabase.execSQL(createTableGioHang);
+
     }
 
     @Override

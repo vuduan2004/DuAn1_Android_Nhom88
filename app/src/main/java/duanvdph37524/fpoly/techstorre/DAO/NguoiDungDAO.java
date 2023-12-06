@@ -80,5 +80,13 @@ public class NguoiDungDAO {
         }
         return 0;
     }
+    public NguoiDung layThongTinNguoiDung() {
+        NguoiDung nguoiDung = new NguoiDung();
+        nguoiDung.setTenKhachHang(sharedPreferences.getString("hoten", ""));
+        nguoiDung.setSoDienThoai(sharedPreferences.getString("sodienthoai", ""));
+        nguoiDung.setDiaChi(sharedPreferences.getString("diachi", ""));
+        return nguoiDung;
+    }
+
 
 }

@@ -88,6 +88,19 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
                 }
             }
         });
+        btnMuaHang = findViewById(R.id.btn_muaNgay);
+        btnMuaHang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChiTietSanPhamActivity.this, ThanhToanActivity.class);
+                intent.putExtra("hinhAnh", getUrl); // Truyền đường dẫn hình ảnh
+                intent.putExtra("tenSP", tenSP); // Bạn có thể truyền thêm thông tin khác nếu cần
+                intent.putExtra("maSP", maSP); // Bạn có thể truyền thêm thông tin khác nếu cần
+                intent.putExtra("giaTien", giaTien); // Bạn có thể truyền thêm thông tin khác nếu cần
+                intent.putExtra("soLuong", soLuong);
+                startActivity(intent);
+            }
+        });
 
     }
 

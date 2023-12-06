@@ -1,37 +1,40 @@
 package duanvdph37524.fpoly.techstorre.Activity;
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import com.squareup.picasso.Picasso;
-
 import java.text.DecimalFormat;
-
-import duanvdph37524.fpoly.techstorre.LoginActivity;
+import duanvdph37524.fpoly.techstorre.DAO.NguoiDungDAO;
 import duanvdph37524.fpoly.techstorre.R;
+import duanvdph37524.fpoly.techstorre.model.NguoiDung;
 
 public class ThanhToanActivity extends AppCompatActivity {
     Toolbar toolbar;
     ImageView imgAnh;
+    ImageButton giamsoluong, tangsoluong;
+    TextView txttttensp, txttgiasp, txttsoluong, txtnguoinhan, txtSdt, txtDiaChi,txtTongTien,txtnavsoluong;
 
-
-    private TextView txttttensp, txttgiasp, txttsoluong, txtsoluonghienthi, txtTongtien, txtnguoinhan, txtSdt, txtDiaChi;
-
+    Button btnthanhtoan;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thanh_toan);
-
+        toolbar = findViewById(R.id.toolbartt);
+        toolbar.setTitle("Thanh Toán");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imgAnh = findViewById(R.id.imgttsp);
         txttttensp = findViewById(R.id.txttttensp);
@@ -40,6 +43,13 @@ public class ThanhToanActivity extends AppCompatActivity {
         txtnguoinhan = findViewById(R.id.txtnguoinhan);
         txtSdt = findViewById(R.id.txtSdt);
         txtDiaChi = findViewById(R.id.txtDiaChi);
+        giamsoluong = findViewById(R.id.img_giamnav);
+        tangsoluong = findViewById(R.id.img_tangnav);
+        txtTongTien = findViewById(R.id.txtTongtien);
+        txtnavsoluong = findViewById(R.id.txt_navsoluong);
+        btnthanhtoan = findViewById(R.id.btnthanhtoan);
+
+
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###.### đ");
         Intent intent = getIntent();
@@ -47,21 +57,114 @@ public class ThanhToanActivity extends AppCompatActivity {
         String tenSP = intent.getStringExtra("tenSP");
         double giaTien = intent.getDoubleExtra("giaTien", 0);
         int soLuong = intent.getIntExtra("soLuong", 0);
-
         txttgiasp.setText(decimalFormat.format(giaTien));
         Picasso.get().load(getUrl).into(imgAnh);
         txttttensp.setText(tenSP);
         txttsoluong.setText(String.valueOf(soLuong));
+        NguoiDungDAO nguoiDungDAO = new NguoiDungDAO(this);
+        NguoiDung nguoiDung = nguoiDungDAO.layThongTinNguoiDung();
 
-        toolbar = findViewById(R.id.toolbartt);
-        toolbar.setTitle("Thanh Toán");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (nguoiDung != null) {
+            txtnguoinhan.setText(nguoiDung.getTenKhachHang());
+            txtSdt.setText(nguoiDung.getSoDienThoai());
+            txtDiaChi.setText(nguoiDung.getDiaChi());
+        }
 
 
 
+        btnthanhtoan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Lấy tổng tiền từ TextView
+                String tongTienString = txtTongTien.getText().toString();
+                double tongTien = Double.parseDouble(tongTienString.replaceAll("[^\\d.]+", ""));
+                // Kiểm tra nếu tổng tiền là 0
+                if (tongTien == 0) {
+                    // Hiển thị thông báo không thể thanh toán
+                    Toast.makeText(ThanhToanActivity.this, "Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm để thanh toán.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Intent intent = new Intent(ThanhToanActivity.this, HoaDonActivity.class);
+                    Toast.makeText(ThanhToanActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+
+
+                    hienThiDialogDatHangThanhCong();
+                }
+            }
+        });
+
+        // Bắt sự kiện click giảm số lượng
+        giamsoluong.setOnClickListener(view -> {
+            int currentQuantity = Integer.parseInt(txtnavsoluong.getText().toString());
+            if (currentQuantity > 0) {
+                currentQuantity--;
+                txtnavsoluong.setText(String.valueOf(currentQuantity));
+                updateTotalPriceAndQuantity(currentQuantity, giaTien);
+            } else {
+                Toast.makeText(ThanhToanActivity.this, "Số lượng không hợp lệ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        // Bắt sự kiện click tăng số lượng
+        tangsoluong.setOnClickListener(view -> {
+            int currentQuantity = Integer.parseInt(txtnavsoluong.getText().toString());
+            if (currentQuantity < soLuong) {
+                currentQuantity++;
+                txtnavsoluong.setText(String.valueOf(currentQuantity));
+
+                updateTotalPriceAndQuantity(currentQuantity, giaTien);
+            } else {
+                Toast.makeText(ThanhToanActivity.this, "Hết Hàng ", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void updateTotalPriceAndQuantity(int quantity, double giaTien) {
+
+        txttsoluong.setText(String.valueOf(quantity));
+
+        if (quantity > 0) {
+            double totalPrice = quantity * giaTien;
+            DecimalFormat decimalFormat = new DecimalFormat("#,###.### đ");
+            txtTongTien.setText(decimalFormat.format(totalPrice));
+        } else {
+
+            txtTongTien.setText("0 đ");
+        }
 
     }
+    private void hienThiDialogDatHangThanhCong() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // Thiết lập thông tin cho Dialog
+        builder.setTitle("Đặt hàng thành công")
+                .setMessage("Đơn hàng của bạn đã được đặt thành công.")
+                .setIcon(R.drawable.tick) // Thay thế bằng icon thông báo của bạn
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        dialog.dismiss();
+                    }
+                });
+
+        // Tạo và hiển thị Dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Tự động đóng dialog sau 5 giây (5000 milliseconds)
+        final Handler handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+            }
+        };
+
+        handler.postDelayed(runnable, 5000); // 5000 milliseconds = 5 giây
+    }
+
+
 
 }
