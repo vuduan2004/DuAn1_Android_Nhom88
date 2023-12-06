@@ -27,6 +27,7 @@ import duanvdph37524.fpoly.techstorre.model.NguoiDung;
 public class TaiKhoanActivity extends AppCompatActivity {
     private TextView tvHoTen;
     private TextView tvTenDangNhap;
+    private ImageView imageView2;
     private ImageView img_change_user;
     private RecyclerView recyclerView;
     private Button btnDangXuat;
@@ -40,9 +41,16 @@ public class TaiKhoanActivity extends AppCompatActivity {
         tvHoTen = findViewById(R.id.tvHoTen);
         tvTenDangNhap = findViewById(R.id.tvTenDangNhap);
         btnDangXuat = findViewById(R.id.btn_log_out);
+        imageView2 = findViewById(R.id.imageView2);
         img_change_user = findViewById(R.id.img_change_user);
         nguoiDungDAO = new NguoiDungDAO(this);
         getTTKhachHang();
+        imageView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TaiKhoanActivity.this, ManHinhChinh.class));
+            }
+        });
         btnDangXuat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
