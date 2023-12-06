@@ -19,6 +19,17 @@
             android:name=".Activity.ChiTietSanPhamActivity"
             android:exported="false" />
         <activity
+            android:name=".Activity.DoiThongTinActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.ChangeUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.TaiKhoanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterActivity"/>
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
@@ -26,6 +37,9 @@
             android:exported="false" />
         <activity
             android:name=".Activity.ManHinhChinh"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

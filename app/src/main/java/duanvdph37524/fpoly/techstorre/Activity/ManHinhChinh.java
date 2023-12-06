@@ -27,12 +27,13 @@ public class ManHinhChinh extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
                 if (item.getItemId() == R.id.itHome) {
                     replanceFragment(new FragmentLoaiSP());
                 } else if (item.getItemId() == R.id.itGioHang) {
                     replanceFragment(new Fragment_GioHang());
                 } else if (item.getItemId() == R.id.itUser) {
-//                  startActivity(new Intent(MainActivity.this, QuanLyTaiKhoan.class));
+                   startActivity(new Intent(ManHinhChinh.this, TaiKhoanActivity.class));
                 }
 
                 return false;
