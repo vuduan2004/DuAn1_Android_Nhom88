@@ -27,8 +27,7 @@
         <activity
             android:name=".Activity.TaiKhoanActivity"
             android:exported="false" />
-        <activity
-            android:name=".RegisterActivity"/>
+        <activity android:name=".RegisterActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="false" />
@@ -37,6 +36,9 @@
             android:exported="false" />
         <activity
             android:name=".Activity.ManHinhChinh"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DoiMatKhauActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
