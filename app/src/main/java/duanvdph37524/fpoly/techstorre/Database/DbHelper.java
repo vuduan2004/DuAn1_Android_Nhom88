@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
     public DbHelper(Context context){
-        super(context, "TechStore", null, 1);
+        super(context, "TechStore", null, 5);
     }
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -67,6 +67,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String createTableHoaDon = "Create table HoaDon" +
                 "(maHD Integer Primary key Autoincrement," +
+                "maSP Integer References SanPham(maSP)," +
+                "soLuongMua Integer Not null," +
                 "tongTien Real Not null," +
                 "ngayTao Date Not null)";
 

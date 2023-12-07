@@ -96,6 +96,7 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
                 intent.putExtra("hinhAnh", getUrl); // Truyền đường dẫn hình ảnh
                 intent.putExtra("tenSP", tenSP); // Bạn có thể truyền thêm thông tin khác nếu cần
                 intent.putExtra("maSP", maSP); // Bạn có thể truyền thêm thông tin khác nếu cần
+                Log.d("masp",String.valueOf(maSP));
                 intent.putExtra("giaTien", giaTien); // Bạn có thể truyền thêm thông tin khác nếu cần
                 intent.putExtra("soLuong", soLuong);
                 startActivity(intent);

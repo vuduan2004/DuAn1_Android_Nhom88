@@ -1,31 +1,45 @@
 package duanvdph37524.fpoly.techstorre.Activity;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
 import com.squareup.picasso.Picasso;
+
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import duanvdph37524.fpoly.techstorre.DAO.HoaDonDAO;
 import duanvdph37524.fpoly.techstorre.DAO.NguoiDungDAO;
 import duanvdph37524.fpoly.techstorre.R;
+import duanvdph37524.fpoly.techstorre.model.HoaDon;
 import duanvdph37524.fpoly.techstorre.model.NguoiDung;
 
 public class ThanhToanActivity extends AppCompatActivity {
     Toolbar toolbar;
     ImageView imgAnh;
     ImageButton giamsoluong, tangsoluong;
-    TextView txttttensp, txttgiasp, txttsoluong, txtnguoinhan, txtSdt, txtDiaChi,txtTongTien,txtnavsoluong;
+    TextView txttttensp, txttgiasp, txttsoluong, txtnguoinhan, txtSdt, txtDiaChi, txtTongTien, txtnavsoluong;
 
     Button btnthanhtoan;
+    double totalPrice;
+    private HoaDonDAO hoaDonDAO;
+    private int maSP, currentQuantity;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,11 +64,15 @@ public class ThanhToanActivity extends AppCompatActivity {
         btnthanhtoan = findViewById(R.id.btnthanhtoan);
 
 
+        hoaDonDAO = new HoaDonDAO(this);
+
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###.### đ");
         Intent intent = getIntent();
         String getUrl = intent.getStringExtra("hinhAnh");
         String tenSP = intent.getStringExtra("tenSP");
+
+        maSP = intent.getIntExtra("maSP", 0);
         double giaTien = intent.getDoubleExtra("giaTien", 0);
         int soLuong = intent.getIntExtra("soLuong", 0);
         txttgiasp.setText(decimalFormat.format(giaTien));
@@ -69,7 +87,6 @@ public class ThanhToanActivity extends AppCompatActivity {
             txtSdt.setText(nguoiDung.getSoDienThoai());
             txtDiaChi.setText(nguoiDung.getDiaChi());
         }
-
 
 
         btnthanhtoan.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +111,7 @@ public class ThanhToanActivity extends AppCompatActivity {
 
         // Bắt sự kiện click giảm số lượng
         giamsoluong.setOnClickListener(view -> {
-            int currentQuantity = Integer.parseInt(txtnavsoluong.getText().toString());
+            currentQuantity = Integer.parseInt(txtnavsoluong.getText().toString());
             if (currentQuantity > 0) {
                 currentQuantity--;
                 txtnavsoluong.setText(String.valueOf(currentQuantity));
@@ -107,7 +124,7 @@ public class ThanhToanActivity extends AppCompatActivity {
 
         // Bắt sự kiện click tăng số lượng
         tangsoluong.setOnClickListener(view -> {
-            int currentQuantity = Integer.parseInt(txtnavsoluong.getText().toString());
+            currentQuantity = Integer.parseInt(txtnavsoluong.getText().toString());
             if (currentQuantity < soLuong) {
                 currentQuantity++;
                 txtnavsoluong.setText(String.valueOf(currentQuantity));
@@ -117,13 +134,16 @@ public class ThanhToanActivity extends AppCompatActivity {
                 Toast.makeText(ThanhToanActivity.this, "Hết Hàng ", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
+
     private void updateTotalPriceAndQuantity(int quantity, double giaTien) {
 
         txttsoluong.setText(String.valueOf(quantity));
 
         if (quantity > 0) {
-            double totalPrice = quantity * giaTien;
+            totalPrice = quantity * giaTien;
             DecimalFormat decimalFormat = new DecimalFormat("#,###.### đ");
             txtTongTien.setText(decimalFormat.format(totalPrice));
         } else {
@@ -132,9 +152,9 @@ public class ThanhToanActivity extends AppCompatActivity {
         }
 
     }
+
     private void hienThiDialogDatHangThanhCong() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         // Thiết lập thông tin cho Dialog
         builder.setTitle("Đặt hàng thành công")
                 .setMessage("Đơn hàng của bạn đã được đặt thành công.")
@@ -142,8 +162,19 @@ public class ThanhToanActivity extends AppCompatActivity {
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        HoaDon hoaDon = new HoaDon();
+                        hoaDon.setMaSP(maSP);
+                        hoaDon.setNgayTao(new Date());
+                        hoaDon.setTongTien(totalPrice);
+                        hoaDon.setSoLuongMua(currentQuantity);
+                        if (hoaDonDAO.themHoaDon(hoaDon)) {
+                            Intent intent = new Intent(ThanhToanActivity.this, HoaDonActivity.class);
+//                            intent.putExtra("SoLuongDat", currentQuantity);
+//                            Log.d("soluongdat",String.valueOf(currentQuantity));
+                            startActivity(intent);
+                            dialog.dismiss();
+                        }
 
-                        dialog.dismiss();
                     }
                 });
 
@@ -165,6 +196,9 @@ public class ThanhToanActivity extends AppCompatActivity {
         handler.postDelayed(runnable, 5000); // 5000 milliseconds = 5 giây
     }
 
-
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return super.onSupportNavigateUp();
+    }
 }
