@@ -51,6 +51,9 @@
             android:name=".Activity.ThanhToanActivity"
             android:exported="false" />
         <activity
+            android:name=".Activity.LichSuDonHangActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.ManHinhChinh"
             android:exported="true">
             <intent-filter>
