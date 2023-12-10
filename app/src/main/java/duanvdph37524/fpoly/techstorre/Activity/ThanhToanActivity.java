@@ -1,6 +1,7 @@
 package duanvdph37524.fpoly.techstorre.Activity;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,11 +24,15 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import duanvdph37524.fpoly.techstorre.DAO.ChiTietSanPhamDAO;
 import duanvdph37524.fpoly.techstorre.DAO.HoaDonDAO;
 import duanvdph37524.fpoly.techstorre.DAO.NguoiDungDAO;
+import duanvdph37524.fpoly.techstorre.DAO.SanPhamDAO;
 import duanvdph37524.fpoly.techstorre.R;
+import duanvdph37524.fpoly.techstorre.model.ChiTietSanPham;
 import duanvdph37524.fpoly.techstorre.model.HoaDon;
 import duanvdph37524.fpoly.techstorre.model.NguoiDung;
+import duanvdph37524.fpoly.techstorre.model.SanPham;
 
 public class ThanhToanActivity extends AppCompatActivity {
     Toolbar toolbar;
@@ -39,6 +44,9 @@ public class ThanhToanActivity extends AppCompatActivity {
     double totalPrice;
     private HoaDonDAO hoaDonDAO;
     private int maSP, currentQuantity;
+    private SanPham sanPham;
+    SanPhamDAO sanPhamDAO;
+    Context context = this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,19 +73,26 @@ public class ThanhToanActivity extends AppCompatActivity {
 
 
         hoaDonDAO = new HoaDonDAO(this);
-
+        sanPhamDAO = new SanPhamDAO(this);
+        ChiTietSanPhamDAO chiTietSanPhamDAO = new ChiTietSanPhamDAO(context);
 
         DecimalFormat decimalFormat = new DecimalFormat("#,###.### đ");
         Intent intent = getIntent();
         String getUrl = intent.getStringExtra("hinhAnh");
         String tenSP = intent.getStringExtra("tenSP");
 
-        maSP = intent.getIntExtra("maSP", 0);
-        double giaTien = intent.getDoubleExtra("giaTien", 0);
-        int soLuong = intent.getIntExtra("soLuong", 0);
-        txttgiasp.setText(decimalFormat.format(giaTien));
-        Picasso.get().load(getUrl).into(imgAnh);
-        txttttensp.setText(tenSP);
+        Bundle bundle = intent.getExtras();
+        maSP = bundle.getInt("maSP", 0);
+        sanPham = sanPhamDAO.getSanPham(String.valueOf(maSP));
+        ChiTietSanPham chiTietSanPham = chiTietSanPhamDAO.getThongTin(sanPham.getMaSP());
+        Log.d("maspls2", String.valueOf(maSP));
+        double giaTien = sanPham.getGiaTien();
+        int soLuong = chiTietSanPham.getSoLuong();
+
+
+        txttgiasp.setText(decimalFormat.format(sanPham.getGiaTien()));
+        Picasso.get().load(sanPham.getHinhAnh()).into(imgAnh);
+        txttttensp.setText(sanPham.getTenSP());
         txttsoluong.setText(String.valueOf(soLuong));
         NguoiDungDAO nguoiDungDAO = new NguoiDungDAO(this);
         NguoiDung nguoiDung = nguoiDungDAO.layThongTinNguoiDung();
@@ -101,11 +116,17 @@ public class ThanhToanActivity extends AppCompatActivity {
                     Toast.makeText(ThanhToanActivity.this, "Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm để thanh toán.", Toast.LENGTH_SHORT).show();
                 } else {
                     // Intent intent = new Intent(ThanhToanActivity.this, HoaDonActivity.class);
-                    Toast.makeText(ThanhToanActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ThanhToanActivity.this, "Thanh toán thành công", Toast.LENGTH_SHORT).show();
+
+                    int capNhatSoLuong = chiTietSanPham.getSoLuong() - currentQuantity;
+                    chiTietSanPham.setSoLuong(capNhatSoLuong);
+                    chiTietSanPhamDAO.capNhat(chiTietSanPham);
+                    Log.d("kiemtralai", String.valueOf(capNhatSoLuong));
 
 
                     hienThiDialogDatHangThanhCong();
                 }
+
             }
         });
 
@@ -140,14 +161,13 @@ public class ThanhToanActivity extends AppCompatActivity {
 
     private void updateTotalPriceAndQuantity(int quantity, double giaTien) {
 
-        txttsoluong.setText(String.valueOf(quantity));
+        txtnavsoluong.setText(String.valueOf(quantity));
 
         if (quantity > 0) {
             totalPrice = quantity * giaTien;
             DecimalFormat decimalFormat = new DecimalFormat("#,###.### đ");
             txtTongTien.setText(decimalFormat.format(totalPrice));
         } else {
-
             txtTongTien.setText("0 đ");
         }
 
@@ -167,10 +187,14 @@ public class ThanhToanActivity extends AppCompatActivity {
                         hoaDon.setNgayTao(new Date());
                         hoaDon.setTongTien(totalPrice);
                         hoaDon.setSoLuongMua(currentQuantity);
+
                         if (hoaDonDAO.themHoaDon(hoaDon)) {
                             Intent intent = new Intent(ThanhToanActivity.this, HoaDonActivity.class);
 //                            intent.putExtra("SoLuongDat", currentQuantity);
 //                            Log.d("soluongdat",String.valueOf(currentQuantity));
+
+
+//                            chiTietSanPhamDAO.capNhat(chiTietSanPham);
                             startActivity(intent);
                             dialog.dismiss();
                         }

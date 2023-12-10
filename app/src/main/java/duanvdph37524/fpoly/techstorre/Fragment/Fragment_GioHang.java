@@ -59,7 +59,10 @@ public class Fragment_GioHang extends Fragment implements AdapterGioHang.TongTie
         btnDatHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ArrayList<GioHang> listGioHang = gioHangDAO.getALL();
+                Intent intent = new Intent(getActivity(), ThanhToanActivity.class);
+                intent.putParcelableArrayListExtra("listGioHang",listGioHang);
+                startActivity(intent);
             }
         });
 

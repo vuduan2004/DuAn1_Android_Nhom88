@@ -23,6 +23,7 @@ import java.util.Comparator;
 
 import duanvdph37524.fpoly.techstorre.Adapter.AdapterSanPham;
 import duanvdph37524.fpoly.techstorre.DAO.SanPhamDAO;
+import duanvdph37524.fpoly.techstorre.DAO.ThongKeDAO;
 import duanvdph37524.fpoly.techstorre.R;
 import duanvdph37524.fpoly.techstorre.model.SanPham;
 
@@ -31,6 +32,7 @@ public class ListSanPhamActivity extends AppCompatActivity {
     RecyclerView rcvListSP;
     TextView tvAll, tvHot, tvSapXep;
     SanPhamDAO sanPhamDAO;
+    ThongKeDAO thongKeDAO;
     AdapterSanPham adapterSanPham;
     Context context = this;
     ArrayList<SanPham> list = new ArrayList<>();
@@ -48,7 +50,7 @@ public class ListSanPhamActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
+        thongKeDAO = new ThongKeDAO(this);
         sanPhamDAO = new SanPhamDAO(this);
         Intent intent = getIntent();
         String maLoai = intent.getStringExtra("maLoai");
@@ -90,6 +92,17 @@ public class ListSanPhamActivity extends AppCompatActivity {
                 popupMenu.show();
             }
         });
+
+        tvHot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list = thongKeDAO.getHot(maLoai);
+                adapterSanPham = new AdapterSanPham(context,list);
+                rcvListSP.setLayoutManager(new GridLayoutManager(context,2));
+                rcvListSP.setAdapter(adapterSanPham);
+            }
+        });
+
     }
     @Override
     public boolean onSupportNavigateUp() {

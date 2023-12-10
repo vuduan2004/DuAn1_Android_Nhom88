@@ -1,6 +1,7 @@
 package duanvdph37524.fpoly.techstorre.DAO;
 
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -28,6 +29,14 @@ public class ChiTietSanPhamDAO {
         String sql = "Select * From ChiTietSanPham";
         return getData(sql);
     }
+
+    public boolean capNhat(ChiTietSanPham chiTietSanPham){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("soLuong", chiTietSanPham.getSoLuong());
+        long row = database.update("ChiTietSanPham",contentValues,"maSP=?", new String[]{String.valueOf(chiTietSanPham.getMaSP())});
+        return (row > 0);
+    }
+
     @SuppressLint("Range")
     public ArrayList<ChiTietSanPham> getData(String sql, String...selection){
         ArrayList<ChiTietSanPham> list = new ArrayList<>();
