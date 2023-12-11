@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import duanvdph37524.fpoly.techstorre.Activity.ThanhToanActivity;
+import duanvdph37524.fpoly.techstorre.Activity.ThanhToanGioHangActivity;
 import duanvdph37524.fpoly.techstorre.Adapter.AdapterGioHang;
 import duanvdph37524.fpoly.techstorre.DAO.GioHangDAO;
 import duanvdph37524.fpoly.techstorre.R;
@@ -60,7 +61,7 @@ public class Fragment_GioHang extends Fragment implements AdapterGioHang.TongTie
             @Override
             public void onClick(View v) {
                 ArrayList<GioHang> listGioHang = gioHangDAO.getALL();
-                Intent intent = new Intent(getActivity(), ThanhToanActivity.class);
+                Intent intent = new Intent(getActivity(), ThanhToanGioHangActivity.class);
                 intent.putParcelableArrayListExtra("listGioHang",listGioHang);
                 startActivity(intent);
             }

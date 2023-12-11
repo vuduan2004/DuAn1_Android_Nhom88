@@ -102,6 +102,15 @@ public class ListSanPhamActivity extends AppCompatActivity {
                 rcvListSP.setAdapter(adapterSanPham);
             }
         });
+        tvAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                list = sanPhamDAO.getALL1(maLoai);
+                adapterSanPham = new AdapterSanPham(context, list);
+                rcvListSP.setAdapter(adapterSanPham);
+                rcvListSP.setLayoutManager(new GridLayoutManager(context, 2));
+            }
+        });
 
     }
     @Override

@@ -22,10 +22,12 @@ import com.squareup.picasso.Picasso;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import duanvdph37524.fpoly.techstorre.Activity.ChiTietSanPhamActivity;
 import duanvdph37524.fpoly.techstorre.DAO.GioHangDAO;
 import duanvdph37524.fpoly.techstorre.DAO.SanPhamDAO;
 import duanvdph37524.fpoly.techstorre.Fragment.Fragment_GioHang;
 import duanvdph37524.fpoly.techstorre.R;
+import duanvdph37524.fpoly.techstorre.model.ChiTietSanPham;
 import duanvdph37524.fpoly.techstorre.model.GioHang;
 import duanvdph37524.fpoly.techstorre.model.SanPham;
 
@@ -35,17 +37,18 @@ public class AdapterGioHang extends RecyclerView.Adapter<AdapterGioHang.viewHole
     SanPhamDAO sanPhamDAO;
     GioHangDAO gioHangDAO;
     double tongTien, tien, giaTien;
-    int soLuongMua,soLuong;
-
+    int soLuongMua, soLuong;
+    private Bundle bundle;
+    ChiTietSanPhamDAO chiTietSanPhamDAO;
 
 
     public interface TongTienListener {
         void tongTien(double tongTien);
+
         void soLuongSanPham(int soLuong);
     }
 
     private TongTienListener tongTienListener;
-
 
 
     public AdapterGioHang(Context context, ArrayList<GioHang> list, TongTienListener listener) {
@@ -54,6 +57,7 @@ public class AdapterGioHang extends RecyclerView.Adapter<AdapterGioHang.viewHole
         this.tongTienListener = listener;
         sanPhamDAO = new SanPhamDAO(context);
         gioHangDAO = new GioHangDAO(context);
+        chiTietSanPhamDAO = new ChiTietSanPhamDAO(context);
     }
 
     @NonNull
@@ -66,6 +70,8 @@ public class AdapterGioHang extends RecyclerView.Adapter<AdapterGioHang.viewHole
     @Override
     public void onBindViewHolder(@NonNull viewHolep holder, int position) {
         GioHang gioHang = list.get(position);
+
+        ChiTietSanPham chiTietSanPham = chiTietSanPhamDAO.getSoLuong(gioHang.getMaSP());
         SanPham sanPham = sanPhamDAO.getSanPham(String.valueOf(gioHang.getMaSP()));
         Log.d("masanpham", String.valueOf(gioHang.getMaSP()));
         DecimalFormat decimalFormat = new DecimalFormat("#,###.### đ");
@@ -73,10 +79,15 @@ public class AdapterGioHang extends RecyclerView.Adapter<AdapterGioHang.viewHole
         holder.tvTen.setText(sanPham.getTenSP());
         Log.d("Tensanpham", sanPham.getTenSP());
         holder.tvGia.setText(decimalFormat.format(sanPham.getGiaTien()));
-        holder.tvSoLuong.setText("Số lượng còn: " + gioHang.getSoLuong());
-        gioHang.setSoLuongMua(1);
-        holder.tvSL.setText(String.valueOf(gioHang.getSoLuongMua()));
 
+//        int soLuong =1;
+//        gioHang.setSoLuongMua(soLuong);
+//        gioHang.setMaSP(gioHang.getMaSP());
+////        gioHangDAO.themGioHang(gioHang);
+//        gioHangDAO.themGioHang2(gioHang);
+
+        holder.tvSL.setText(String.valueOf(gioHang.getSoLuongMua()));
+        holder.tvSoLuong.setText("Số lượng còn: " + chiTietSanPham.getSoLuong());
 
 
         giaTien = sanPham.getGiaTien();
@@ -125,6 +136,9 @@ public class AdapterGioHang extends RecyclerView.Adapter<AdapterGioHang.viewHole
             @Override
             public void onClick(View view) {
                 gioHang.setSoLuongMua(gioHang.getSoLuongMua() + 1);
+                gioHangDAO.update(gioHang);
+
+                Log.d("soluonggh", String.valueOf(gioHang.getSoLuongMua()));
                 holder.tvSL.setText(String.valueOf(gioHang.getSoLuongMua()));
                 //cập nhật tiền
 //                tien = giaTien * gioHang.getSoLuongMua();
@@ -139,17 +153,24 @@ public class AdapterGioHang extends RecyclerView.Adapter<AdapterGioHang.viewHole
             public void onClick(View view) {
                 if (gioHang.getSoLuongMua() > 1) {
                     gioHang.setSoLuongMua(gioHang.getSoLuongMua() - 1);
+                    gioHangDAO.update(gioHang);
                     holder.tvSL.setText(String.valueOf(gioHang.getSoLuongMua()));
+
+                    Log.d("soluonggh", String.valueOf(gioHang.getSoLuongMua()));
+
                     giaTien = sanPham.getGiaTien();
                     tongTien -= giaTien;
                     tongTienListener.tongTien(tongTien);
-                    Log.d("kiemtratien", decimalFormat.format(tongTien));
                 }
             }
         });
 
+        Log.d("soluongmuagiohang", String.valueOf(gioHang.getSoLuongMua()));
+
+//
+
         soLuong = list.size();
-        if(tongTienListener != null){
+        if (tongTienListener != null) {
             tongTienListener.tongTien(tongTien);
             tongTienListener.soLuongSanPham(soLuong);
         }

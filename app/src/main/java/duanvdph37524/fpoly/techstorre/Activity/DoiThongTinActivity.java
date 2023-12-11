@@ -66,7 +66,7 @@ public class DoiThongTinActivity extends AppCompatActivity {
                 UpdateTTKhachHang();
             }
         });
-
+        
     }
 
     private void UpdateTTKhachHang(){

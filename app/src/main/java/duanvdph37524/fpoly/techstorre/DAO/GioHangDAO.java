@@ -28,8 +28,23 @@ public class GioHangDAO {
     public boolean themGioHang(GioHang gioHang) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("maSP", gioHang.getMaSP());
-        contentValues.put("soLuong", gioHang.getSoLuong());
+        contentValues.put("soLuong", gioHang.getSoLuongMua());
         long row = database.insert("GioHang", null, contentValues);
+        return (row > 0);
+    }
+
+    public boolean themGioHang2(GioHang gioHang) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("maSP", gioHang.getMaSP());
+        contentValues.put("soLuong", gioHang.getSoLuongMua());
+        long row = database.insert("GioHang", null, contentValues);
+        return (row > 0);
+    }
+
+    public boolean update(GioHang gioHang) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("soLuong", gioHang.getSoLuongMua());
+        long row = database.update("GioHang", contentValues,"maGioHang=?",new String[]{String.valueOf(gioHang.getMaGioHang())});
         return (row > 0);
     }
 

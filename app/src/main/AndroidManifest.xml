@@ -17,6 +17,18 @@
         android:theme="@style/Theme.TechStorre"
         tools:targetApi="31">
         <activity
+            android:name=".Activity.ManHinhChao"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activity.ThanhToanGioHangActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.HoaDonChiTietActivity"
             android:exported="false" />
         <activity
@@ -56,11 +68,7 @@
         <activity
             android:name=".Activity.ManHinhChinh"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

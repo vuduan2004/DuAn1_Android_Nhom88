@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import duanvdph37524.fpoly.techstorre.DAO.NguoiDungDAO;
 import duanvdph37524.fpoly.techstorre.R;
 
 public class ChangeUserActivity extends AppCompatActivity {
@@ -20,6 +21,7 @@ public class ChangeUserActivity extends AppCompatActivity {
     private TextView tvNamSinh;
     private TextView tvSoDienThoai;
     private TextView tvDiaChi;
+    NguoiDungDAO nguoiDungDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,7 @@ public class ChangeUserActivity extends AppCompatActivity {
         tvSoDienThoai = findViewById(R.id.tvSoDienThoai);
         tvDiaChi = findViewById(R.id.tvDiaChi);
         getTTKhachHang();
+        nguoiDungDAO = new NguoiDungDAO(this);
         btn_doi_thong_tin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,7 +44,15 @@ public class ChangeUserActivity extends AppCompatActivity {
                 intent.putExtra("namsinh", tvNamSinh.getText().toString());
                 intent.putExtra("diachi", tvDiaChi.getText().toString());
                 intent.putExtra("sodienthoai", tvSoDienThoai.getText().toString());
-                startActivity(intent);
+                SharedPreferences sharedPreferences = getSharedPreferences("THONGTIN",Context.MODE_PRIVATE);
+                String tenDN = sharedPreferences.getString("tendangnhap","");
+                String hoTen = tvHoTen.getText().toString();
+                String namSinh = tvNamSinh.getText().toString();
+                String diaChi = tvDiaChi.getText().toString();
+                String soDT = tvSoDienThoai.getText().toString();
+                if(nguoiDungDAO.capnhatThongTin(tenDN,hoTen,namSinh,soDT,diaChi)){
+                    startActivity(intent);
+                }
             }
         });
         img_back_tai_khoan.setOnClickListener(new View.OnClickListener() {

@@ -8,15 +8,11 @@ import androidx.annotation.NonNull;
 public class GioHang implements Parcelable {
     private int maGioHang,maSP, soLuong,soLuongMua;
 
-    public GioHang(int maGioHang, int maSP, int soLuong) {
-        this.maGioHang = maGioHang;
-        this.maSP = maSP;
-        this.soLuong = soLuong;
-    }
 
-    public GioHang(int maSP, int soLuong) {
+
+    public GioHang(int maSP, int soLuongMua) {
         this.maSP = maSP;
-        this.soLuong = soLuong;
+        this.soLuongMua = soLuongMua;
     }
 
     public GioHang(int maGioHang, int maSP, int soLuong, int soLuongMua) {

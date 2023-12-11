@@ -80,7 +80,9 @@ public class ChiTietSanPhamActivity extends AppCompatActivity {
         btnThemGioHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GioHang gioHang = new GioHang(maSP, soLuong);
+                GioHang gioHang = new GioHang();
+                gioHang.setMaSP(maSP);
+                gioHang.setSoLuongMua(1);
                 Log.d("Kiểm tra", String.valueOf(maSP));
                 Log.d("Kiểm tra", String.valueOf(soLuong));
                 if (gioHangDAO.themGioHang(gioHang)) {

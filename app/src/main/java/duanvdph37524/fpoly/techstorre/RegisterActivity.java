@@ -64,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                     boolean check = nguoiDungDAO.Register(user, hoten, namsinh, sdt, diachi, matkhau);
                     if(check){
                         Toast.makeText(RegisterActivity.this, "Đăng ký thành công", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                     } else {
                         Toast.makeText(RegisterActivity.this, "Đăng ký thất bại", Toast.LENGTH_SHORT).show();
                     }

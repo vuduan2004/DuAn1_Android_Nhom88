@@ -191,9 +191,7 @@ public class ThanhToanActivity extends AppCompatActivity {
                         if (hoaDonDAO.themHoaDon(hoaDon)) {
                             Intent intent = new Intent(ThanhToanActivity.this, HoaDonActivity.class);
 //                            intent.putExtra("SoLuongDat", currentQuantity);
-//                            Log.d("soluongdat",String.valueOf(currentQuantity));
-
-
+//                            Log.d("soluongdat",String.valueOf(currentQuantity))
 //                            chiTietSanPhamDAO.capNhat(chiTietSanPham);
                             startActivity(intent);
                             dialog.dismiss();
